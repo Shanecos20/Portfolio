@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, Github, Linkedin, Mail, Code, Briefcase, Terminal, Menu, X, Heart } from 'lucide-react';
 
 const Portfolio = () => {
@@ -153,75 +153,6 @@ const Portfolio = () => {
 
   return (
     <div className="bg-black text-white overflow-x-hidden font-mono">
-      <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Mono:wght@400;700&display=swap');
-        
-        .pixel-font {
-          font-family: 'Press Start 2P', cursive;
-        }
-        
-        .retro-font {
-          font-family: 'VT323', monospace;
-        }
-        
-        .mono-font {
-          font-family: 'Space Mono', monospace;
-        }
-        
-        @keyframes flicker {
-          0%, 100% { opacity: 1; }
-          92% { opacity: 0.8; }
-          93% { opacity: 0.4; }
-          94% { opacity: 0.8; }
-        }
-        
-        @keyframes glitch {
-          0%, 100% { 
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-          }
-          20% {
-            text-shadow: -2px 0 #ff0000, 2px 0 #00ffff;
-          }
-          21% {
-            text-shadow: 0 0 10px rgba(255,255,255,0.5);
-          }
-        }
-        
-        @keyframes blink {
-          0%, 49% { opacity: 1; }
-          50%, 100% { opacity: 0; }
-        }
-        
-        .flicker {
-          animation: flicker 3s infinite;
-        }
-        
-        .glitch {
-          animation: glitch 4s infinite;
-        }
-        
-        .blink {
-          animation: blink 1s infinite;
-        }
-        
-        .scanlines::before {
-          content: "";
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(255, 255, 255, 0.03) 2px,
-            rgba(255, 255, 255, 0.03) 4px
-          );
-          pointer-events: none;
-          z-index: 1;
-        }
-      `}</style>
 
       {/* Scanlines overlay */}
       <div className="scanlines" />

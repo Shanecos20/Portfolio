@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronDown, Github, Linkedin, Mail, Code, Briefcase, Terminal, Menu, X, Heart } from 'lucide-react';
+import { ChevronDown, Github, Linkedin, Mail, Code, Briefcase, Terminal, Menu, X, Heart, ExternalLink } from 'lucide-react';
 
 const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('home');
@@ -7,6 +7,7 @@ const Portfolio = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [glitchText, setGlitchText] = useState('SHANE COSTELLO');
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [selectedProject, setSelectedProject] = useState<number | null>(null);
   const fullText = "* Full-Stack Developer | Innovation | Digital Design";
   const typingSpeed = 80;
 
@@ -97,26 +98,57 @@ const Portfolio = () => {
 
   const projects = [
     {
-      title: "[HIVE]",
+      title: "[HIVE_WEB]",
       subtitle: "IoT Beekeeping Platform",
       description: "AI-powered sensor platform for real-time bee colony health monitoring",
       tech: ["React", "IoT", "AI/ML", "Node.js"],
       achievement: "★ EU GREEN AWARD WINNER",
-      stats: { impact: "70+ submissions", rank: "TOP 1.5%" }
+      stats: { impact: "70+ submissions", rank: "TOP 1.5%" },
+      longDescription: "HIVE is an innovative IoT platform that uses AI to monitor bee colony health in real-time. The system collects data from sensors placed within beehives, analyzing metrics like temperature, humidity, weight, and sound patterns to detect potential health issues before they become critical. With an intuitive React dashboard, beekeepers can monitor their colonies remotely and receive alerts when intervention is needed.",
+      links: [
+        { label: "View Project", url: "https://github.com/Shanecos20/hivesite2/tree/main/hivesite-react" },
+        { label: "Live Demo", url: "https://hiveapp.ie" }
+      ],
+      image: "https://via.placeholder.com/800x450/1a1a1a/00ff00?text=HIVE+Dashboard+Interface"
     },
     {
-      title: "[GOLF_LIVE]",
-      subtitle: "Real-time Scoring System",
-      description: "Live golf tournament tracking for The Bridge Bar",
-      tech: ["React", "WebSocket", "Node.js"],
-      stats: { users: "200+", uptime: "99.9%" }
+      title: "[HIVE_APP]",
+      subtitle: "Mobile Beekeeping Companion",
+      description: "React Native app for on-the-go hive monitoring and management",
+      tech: ["React Native", "Expo", "TypeScript", "Firebase"],
+      stats: { downloads: "500+", rating: "4.8/5" },
+      longDescription: "The HIVE mobile app complements the web platform by providing beekeepers with on-the-go access to their hive data. Built with React Native and Expo, the app allows users to view real-time sensor data, receive push notifications for critical alerts, log manual inspections, and capture photos of their hives. The intuitive interface makes it easy for beekeepers to stay connected to their colonies wherever they are.",
+      links: [
+        { label: "View Project", url: "https://github.com/Shanecos20/hive-mobile-app" },
+        { label: "Download APK", url: "https://expo.dev/@shanecos20/hive-app" }
+      ],
+      image: "https://via.placeholder.com/800x450/1a1a1a/00ff00?text=HIVE+Mobile+App+UI"
     },
     {
-      title: "[TIPSTER_PRO]",
-      subtitle: "Competition Platform",
-      description: "Automated scoring system eliminating manual calculation errors",
-      tech: ["JavaScript", "PHP", "MySQL"],
-      stats: { efficiency: "+30%", errors: "-100%" }
+      title: "[BAKER_MERN]",
+      subtitle: "Full-Stack Bakery Management",
+      description: "Complete bakery management system with inventory and order tracking",
+      tech: ["MongoDB", "Express", "React", "Node.js"],
+      stats: { orders: "1000+", uptime: "99.5%" },
+      longDescription: "A comprehensive bakery management system built with the MERN stack. Features include product catalog management, real-time inventory tracking, order processing, customer management, and sales analytics. The system includes both customer-facing ordering interface and admin dashboard for bakery staff. Integrated payment processing and automated inventory updates streamline operations for small to medium bakeries.",
+      links: [
+        { label: "View Project", url: "https://github.com/Shanecos20/baker-mern" },
+        { label: "Live Demo", url: "https://baker-demo.example.com" }
+      ],
+      image: "https://via.placeholder.com/800x450/8B4513/fff?text=Bakery+Management+System"
+    },
+    {
+      title: "[POKEMON_BATTLE]",
+      subtitle: "Angular Battle Simulator",
+      description: "Turn-based Pokemon battle game with TypeScript and Angular",
+      tech: ["Angular", "TypeScript", "RxJS", "SCSS"],
+      stats: { battles: "5000+", pokemon: "150+" },
+      longDescription: "An interactive Pokemon battle simulator built with Angular and TypeScript. Features include turn-based combat system, Pokemon stats calculation, move effectiveness algorithms, and battle animations. The game includes 150+ Pokemon with authentic stats, moves, and type effectiveness. Built with Angular's reactive forms and RxJS for smooth state management and real-time battle updates.",
+      links: [
+        { label: "View Project", url: "https://github.com/Shanecos20/pokemon-battle-angular" },
+        { label: "Play Game", url: "https://pokemon-battle-simulator.example.com" }
+      ],
+      image: "https://via.placeholder.com/800x450/3B4CCA/fff?text=Pokemon+Battle+Interface"
     }
   ];
 
@@ -151,6 +183,13 @@ const Portfolio = () => {
     }
   ];
 
+  // Helper function to close modal when clicking outside
+  const closeModalOnOutsideClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setSelectedProject(null);
+    }
+  };
+
   return (
     <div className="bg-black text-white overflow-x-hidden font-mono">
 
@@ -158,9 +197,9 @@ const Portfolio = () => {
       <div className="scanlines" />
 
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-sm border-b border-gray-800">
+      <nav className="fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center bg-black/90 backdrop-blur-sm border border-gray-800 rounded-full px-6 py-3">
             <div className="pixel-font text-xs text-gray-400">
               SC://PORTFOLIO.EXE
             </div>
@@ -312,6 +351,7 @@ const Portfolio = () => {
                 className="border border-gray-800 p-6 hover:border-gray-600 transition-all cursor-pointer"
                 onMouseEnter={() => setHoveredProject(index)}
                 onMouseLeave={() => setHoveredProject(null)}
+                onClick={() => setSelectedProject(index)}
               >
                 <div className="mono-font text-xs text-gray-500 mb-2">PROJECT_{index + 1}</div>
                 <h3 className="retro-font text-2xl mb-1">{project.title}</h3>
@@ -340,6 +380,10 @@ const Portfolio = () => {
                     ))}
                   </div>
                 )}
+                
+                <div className="mt-4 text-center text-xs text-cyan-500 mono-font">
+                  [CLICK FOR DETAILS]
+                </div>
               </div>
             ))}
           </div>
@@ -445,6 +489,91 @@ const Portfolio = () => {
           </div>
         </div>
       </section>
+
+      {/* Project Modal */}
+      {selectedProject !== null && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
+          onClick={closeModalOnOutsideClick}
+        >
+          <div className="bg-black border border-gray-800 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-black border-b border-gray-800 p-4 flex justify-between items-center">
+              <h3 className="retro-font text-xl">{projects[selectedProject].title}</h3>
+              <button 
+                onClick={() => setSelectedProject(null)}
+                className="text-gray-500 hover:text-white"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              {/* Project image */}
+              <div className="border border-gray-800 bg-gray-900 h-64 md:h-80 flex items-center justify-center overflow-hidden">
+                <img 
+                  src={projects[selectedProject].image} 
+                  alt={projects[selectedProject].title} 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              
+              {/* Project details */}
+              <div className="space-y-6">
+                <div>
+                  <div className="mono-font text-xs text-gray-500 mb-2">[OVERVIEW]</div>
+                  <p className="mono-font text-sm text-gray-400 leading-relaxed">
+                    {projects[selectedProject].longDescription}
+                  </p>
+                </div>
+                
+                <div>
+                  <div className="mono-font text-xs text-gray-500 mb-2">[TECHNOLOGIES]</div>
+                  <div className="flex flex-wrap gap-2">
+                    {projects[selectedProject].tech.map((tech, i) => (
+                      <span key={i} className="mono-font text-xs px-3 py-1 border border-gray-700 text-gray-400">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                
+                {projects[selectedProject].stats && (
+                  <div>
+                    <div className="mono-font text-xs text-gray-500 mb-2">[STATS]</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {Object.entries(projects[selectedProject].stats).map(([key, value]) => (
+                        <div key={key} className="border border-gray-800 p-3">
+                          <div className="mono-font text-xs text-gray-500">{key.toUpperCase()}</div>
+                          <div className="retro-font text-lg">{value}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Project links */}
+                <div>
+                  <div className="mono-font text-xs text-gray-500 mb-2">[LINKS]</div>
+                  <div className="space-x-4">
+                    {projects[selectedProject].links.map((link, i) => (
+                      <a 
+                        key={i}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center px-4 py-2 border border-cyan-900 bg-black hover:bg-cyan-900/20 transition-all mono-font text-xs text-cyan-500"
+                      >
+                        {link.label}
+                        <ExternalLink size={14} className="ml-2" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

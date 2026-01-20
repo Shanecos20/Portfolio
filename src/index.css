@@ -1,17 +1,26 @@
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap');
+
+/* Custom Font - Against */
+@font-face {
+  font-family: 'Against';
+  src: url('./fonts/against regular.otf') format('opentype'),
+       url('./fonts/against regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  line-height: 1.6;
   font-weight: 400;
-  color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #000000;
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -21,79 +30,98 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #000000;
+  background-color: #f5f5f0;
 }
 
+/* Hero Typography - Using Against font */
+.hero-text {
+  font-family: 'Against', 'DM Serif Display', serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.hero-accent {
+  font-style: normal;
+  color: #e63946;
+}
+
+/* Page titles */
+.page-title {
+  font-family: 'Against', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+/* Selection */
+::selection {
+  background: #e63946;
+  color: white;
+}
+
+/* Smooth scroll */
 html {
   scroll-behavior: smooth;
 }
 
-/* Custom font classes */
-.pixel-font {
-  font-family: 'Press Start 2P', cursive;
+/* Vertical Carousel */
+.carousel-track {
+  display: flex;
+  flex-direction: column;
+  animation: scroll-down 25s linear infinite;
 }
 
-.retro-font {
-  font-family: 'VT323', monospace;
+.carousel-item {
+  padding: 1rem;
 }
 
-.mono-font {
-  font-family: 'Space Mono', monospace;
+.carousel-item:nth-child(odd) {
+  transform: perspective(800px) rotateY(-10deg);
 }
 
-/* Animations */
-@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  92% { opacity: 0.8; }
-  93% { opacity: 0.4; }
-  94% { opacity: 0.8; }
+.carousel-item:nth-child(even) {
+  transform: perspective(800px) rotateY(10deg);
 }
 
-@keyframes glitch {
-  0%, 100% { 
-    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+.carousel-item img {
+  border-radius: 8px;
+  box-shadow: 
+    0 15px 30px -10px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes scroll-down {
+  0% {
+    transform: translateY(0);
   }
-  20% {
-    text-shadow: -2px 0 #ff0000, 2px 0 #00ffff;
-  }
-  21% {
-    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+  100% {
+    transform: translateY(-50%);
   }
 }
 
-@keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+/* Hide default cursor on touch devices */
+@media (hover: none) {
+  .cursor-none {
+    cursor: auto;
+  }
 }
 
-/* Animation classes */
-.flicker {
-  animation: flicker 3s infinite;
+/* Hide carousel on small screens */
+@media (max-width: 1024px) {
+  .fixed.right-0.w-\[35vw\] {
+    display: none;
+  }
 }
 
-.glitch {
-  animation: glitch 4s infinite;
+/* Slide up animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-.blink {
-  animation: blink 1s infinite;
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out forwards;
 }
-
-/* Scanlines effect */
-.scanlines::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(255, 255, 255, 0.03) 2px,
-    rgba(255, 255, 255, 0.03) 4px
-  );
-  pointer-events: none;
-  z-index: 1;
-} 

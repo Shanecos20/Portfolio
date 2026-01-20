@@ -3,9 +3,17 @@ import { Link } from 'react-router-dom';
 
 function Websites() {
   const [isHovering, setIsHovering] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorPos = useRef({ x: 0, y: 0 });
   const targetPos = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Websites with two images each - secondIsMobile adds blur background effect
   const websites = [
@@ -85,51 +93,79 @@ function Websites() {
         />
       </div>
 
-      {/* Top Row */}
-      <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-4 md:p-6">
-        <Link 
-          to="/" 
-          className="bg-black px-4 py-2 flex items-center gap-2 text-[#e8e4dc] hover:text-white transition-colors group"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          <svg 
-            viewBox="0 0 24 24" 
-            className="w-4 h-4 group-hover:-translate-x-1 transition-transform"
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth="1.5"
+      {/* Top Row - Mobile */}
+      {isMobile && (
+        <div className="sticky top-0 z-20 flex justify-between items-center p-4 bg-[#0a0a0a]/90 backdrop-blur-sm">
+          <Link 
+            to="/" 
+            className="bg-black px-3 py-2 flex items-center gap-2 text-[#e8e4dc] text-xs"
           >
-            <path d="M19 12H5M12 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span className="text-xs md:text-sm tracking-[0.2em] uppercase">Back</span>
-        </Link>
-      </div>
+            <svg viewBox="0 0 24 24" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M19 12H5M12 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            BACK
+          </Link>
 
-      {/* Centered Nav Buttons */}
-      <div className="absolute top-0 left-0 right-0 z-20 flex justify-center p-4 md:p-6 pointer-events-none">
-        <div className="flex gap-2 pointer-events-auto">
-          <Link 
-            to="/graphics"
-            className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] hover:text-white transition-colors duration-300 uppercase"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-          >
-            Graphics
-          </Link>
-          <Link 
-            to="/websites"
-            className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] hover:text-white transition-colors duration-300 uppercase"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-          >
-            Websites
-          </Link>
+          <div className="flex gap-2">
+            <Link to="/graphics" className="bg-black px-3 py-2 text-xs tracking-[0.15em] text-[#e8e4dc] uppercase">
+              Graphics
+            </Link>
+            <Link to="/websites" className="bg-black px-3 py-2 text-xs tracking-[0.15em] text-[#e8e4dc] uppercase">
+              Websites
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Top Row - Desktop */}
+      {!isMobile && (
+        <>
+          <div className="fixed top-0 left-0 right-0 z-20 flex justify-between items-start p-6">
+            <Link 
+              to="/" 
+              className="bg-black px-4 py-2 flex items-center gap-2 text-[#e8e4dc] hover:text-white transition-colors group"
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+            >
+              <svg 
+                viewBox="0 0 24 24" 
+                className="w-4 h-4 group-hover:-translate-x-1 transition-transform"
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="1.5"
+              >
+                <path d="M19 12H5M12 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span className="text-sm tracking-[0.2em] uppercase">BACK</span>
+            </Link>
+          </div>
+
+          {/* Centered Nav Buttons */}
+          <div className="fixed top-0 left-0 right-0 z-20 flex justify-center p-6 pointer-events-none">
+            <div className="flex gap-2 pointer-events-auto">
+              <Link 
+                to="/graphics"
+                className="bg-black px-4 py-2 text-sm tracking-[0.2em] text-[#e8e4dc] hover:text-white transition-colors duration-300 uppercase"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                Graphics
+              </Link>
+              <Link 
+                to="/websites"
+                className="bg-black px-4 py-2 text-sm tracking-[0.2em] text-[#e8e4dc] hover:text-white transition-colors duration-300 uppercase"
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+              >
+                Websites
+              </Link>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Content */}
-      <div className="pt-24 pb-24 px-4 md:px-8 lg:px-16">
+      <div className={`${isMobile ? 'pt-4' : 'pt-24'} pb-24 px-4 md:px-8 lg:px-16`}>
         <div className="max-w-6xl mx-auto space-y-16">
           {websites.map((site, index) => (
             <div key={index} className="group">
@@ -211,7 +247,7 @@ function Websites() {
       </div>
 
       {/* Bottom Row */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 flex justify-end gap-2 p-4 md:p-6">
+      <div className={`fixed bottom-0 left-0 right-0 z-30 flex justify-end gap-2 p-4 md:p-6 ${isMobile ? 'bg-[#0a0a0a]/90 backdrop-blur-sm' : ''}`}>
         <a 
           href="/Shane Costello CV.pdf"
           download

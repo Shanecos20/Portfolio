@@ -160,7 +160,7 @@ function Home() {
         </div>
 
         {/* All Sections */}
-        <div className="px-6 pb-8">
+        <div className="px-6 pb-20">
           {sections.map((section, idx) => (
             <div key={section.id} className={`py-12 ${idx !== 0 ? 'border-t border-[#e8e4dc]/10' : ''}`}>
               <h1 
@@ -186,27 +186,22 @@ function Home() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="sticky bottom-0 z-20 flex justify-between items-center p-4 bg-[#0a0a0a]/90 backdrop-blur-sm">
-          <span className="text-[10px] tracking-[0.1em] text-[#e8e4dc]/60">
-            ©Shane Costello
-          </span>
-          <div className="flex gap-3">
-            <a 
-              href="/Shane Costello CV.pdf"
-              download
-              className="text-[10px] tracking-[0.1em] text-[#e8e4dc] uppercase"
-            >
-              CV ↓
-            </a>
-            <a 
-              href="https://linkedin.com/in/shanecos21" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[10px] tracking-[0.1em] text-[#e8e4dc] uppercase"
-            >
-              LinkedIn →
-            </a>
-          </div>
+        <div className="fixed bottom-0 left-0 right-0 z-20 flex justify-end gap-2 p-4 bg-[#0a0a0a]/90 backdrop-blur-sm">
+          <a 
+            href="/Shane Costello CV.pdf"
+            download
+            className="bg-black px-4 py-2 text-xs tracking-[0.2em] text-[#e8e4dc] uppercase"
+          >
+            CV ↓
+          </a>
+          <a 
+            href="https://linkedin.com/in/shanecos21" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-black px-4 py-2 text-xs tracking-[0.2em] text-[#e8e4dc] uppercase"
+          >
+            LinkedIn →
+          </a>
         </div>
       </div>
     );
@@ -238,27 +233,6 @@ function Home() {
         ))}
       </div>
 
-      {/* Selected Graphic & Song Labels */}
-      <div 
-        className="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex gap-4 items-center"
-      >
-        <div className="bg-black px-6 py-3 pointer-events-none">
-          <span className="text-sm tracking-[0.3em] text-[#e8e4dc] uppercase">
-            Highlighted Graphic
-          </span>
-        </div>
-        
-        <button 
-          onClick={() => setShowSongEmbed(!showSongEmbed)}
-          className="bg-black px-6 py-3 hover:bg-neutral-900 transition-colors"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          <span className="text-sm tracking-[0.3em] text-[#e8e4dc] uppercase">
-            Selected Song
-          </span>
-        </button>
-      </div>
 
       {/* Custom cursor */}
       <div 
@@ -390,12 +364,6 @@ function Home() {
       {/* Bottom Row - STATIC - Absolute positioned */}
       <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-between items-end p-6">
         <div className="bg-black px-4 py-2">
-          <span className="text-sm tracking-[0.2em] text-[#e8e4dc]">
-            ©Shane Costello
-          </span>
-        </div>
-        
-        <div className="bg-black px-4 py-2">
           <span className="text-sm tracking-[0.2em] text-[#e8e4dc] uppercase">
             SCROLL
           </span>
@@ -421,6 +389,28 @@ function Home() {
           >
             LinkedIn →
           </a>
+        </div>
+      </div>
+
+      {/* Center Bottom - Selected Graphic & Song Labels */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-center p-6 pointer-events-none">
+        <div className="flex gap-2 pointer-events-auto">
+          <div className="bg-black px-6 py-2">
+            <span className="text-sm tracking-[0.3em] text-[#e8e4dc] uppercase">
+              Highlighted Graphic
+            </span>
+          </div>
+          
+          <button 
+            onClick={() => setShowSongEmbed(!showSongEmbed)}
+            className="bg-black px-6 py-2 hover:bg-neutral-900 transition-colors"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            <span className="text-sm tracking-[0.3em] text-[#e8e4dc] uppercase">
+              Selected Song
+            </span>
+          </button>
         </div>
       </div>
 

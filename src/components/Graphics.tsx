@@ -21,7 +21,6 @@ function Graphics() {
   ];
 
   // Hexagonal layout - 1 center, 6 around (touching, no gaps)
-  // Image size is w-72 (288px) x h-96 (384px)
   const imgWidth = 288;
   const imgHeight = 384;
   
@@ -83,8 +82,9 @@ function Graphics() {
 
   return (
     <div 
-      className={`min-h-screen w-screen bg-[#f5f5f0] ${viewMode === 'canvas' ? 'h-screen overflow-hidden cursor-grab active:cursor-grabbing' : 'overflow-auto cursor-none'}`}
+      className={`min-h-screen w-screen bg-[#0a0a0a] overflow-x-hidden scrollbar-hide ${viewMode === 'canvas' ? 'h-screen overflow-hidden cursor-grab active:cursor-grabbing' : 'overflow-y-auto cursor-none'}`}
       onMouseDown={handleMouseDown}
+      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
     >
       {/* Custom cursor - fluid */}
       <div 
@@ -101,54 +101,72 @@ function Graphics() {
         />
       </div>
 
-      {/* Back button */}
-      <Link 
-        to="/" 
-        className="fixed top-10 left-10 z-30 flex items-center gap-3 text-neutral-800 hover:text-[#e63946] transition-colors group"
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        <svg 
-          viewBox="0 0 24 24" 
-          className="w-5 h-5 group-hover:-translate-x-1 transition-transform"
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="1.5"
+      {/* Top Row - matching Home exactly */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-4 md:p-6">
+        <Link 
+          to="/" 
+          className="bg-black px-4 py-2 flex items-center gap-2 text-[#e8e4dc] hover:text-white transition-colors group"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
-          <path d="M19 12H5M12 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        <span className="text-sm" style={{ fontFamily: 'Against, sans-serif' }}>Back</span>
-      </Link>
+          <svg 
+            viewBox="0 0 24 24" 
+            className="w-4 h-4 group-hover:-translate-x-1 transition-transform"
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="1.5"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span className="text-xs md:text-sm tracking-[0.2em] uppercase">Back</span>
+        </Link>
 
-      {/* Title */}
-      <div className="fixed top-10 left-1/2 -translate-x-1/2 z-30 text-center pointer-events-none">
-        <h1 className="text-sm text-neutral-500" style={{ fontFamily: 'Against, sans-serif' }}>
-          Graphics {viewMode === 'canvas' ? '— Drag to explore' : ''}
-        </h1>
+        <div 
+          className="bg-black px-4 py-2 flex items-center gap-3"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <span className={`text-xs md:text-sm tracking-[0.2em] uppercase transition-colors ${viewMode === 'canvas' ? 'text-[#e8e4dc]' : 'text-[#e8e4dc]/40'}`}>
+            Canvas
+          </span>
+          <button
+            onClick={() => setViewMode(viewMode === 'canvas' ? 'grid' : 'canvas')}
+            className="hover:opacity-80 transition-opacity"
+          >
+            <div className="w-8 h-4 bg-[#e8e4dc]/20 rounded-full relative">
+              <div 
+                className={`absolute top-0.5 w-3 h-3 bg-[#e8e4dc] rounded-full transition-all duration-300 ${
+                  viewMode === 'grid' ? 'left-4' : 'left-0.5'
+                }`}
+              />
+            </div>
+          </button>
+          <span className={`text-xs md:text-sm tracking-[0.2em] uppercase transition-colors ${viewMode === 'grid' ? 'text-[#e8e4dc]' : 'text-[#e8e4dc]/40'}`}>
+            Grid
+          </span>
+        </div>
       </div>
 
-      {/* View Mode Toggle */}
-      <div 
-        className="fixed top-10 right-10 z-30 flex items-center gap-3"
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
-      >
-        <span className={`text-xs transition-colors ${viewMode === 'canvas' ? 'text-neutral-800' : 'text-neutral-400'}`} style={{ fontFamily: 'Against, sans-serif' }}>
-          Canvas
-        </span>
-        <button
-          onClick={() => setViewMode(viewMode === 'canvas' ? 'grid' : 'canvas')}
-          className="relative w-12 h-6 bg-neutral-200 rounded-full transition-colors hover:bg-neutral-300"
-        >
-          <div 
-            className={`absolute top-1 w-4 h-4 bg-neutral-800 rounded-full transition-all duration-300 ${
-              viewMode === 'grid' ? 'left-7' : 'left-1'
-            }`}
-          />
-        </button>
-        <span className={`text-xs transition-colors ${viewMode === 'grid' ? 'text-neutral-800' : 'text-neutral-400'}`} style={{ fontFamily: 'Against, sans-serif' }}>
-          Grid
-        </span>
+      {/* Centered Nav Buttons */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex justify-center p-4 md:p-6 pointer-events-none">
+        <div className="flex gap-2 pointer-events-auto">
+          <Link 
+            to="/graphics"
+            className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] hover:text-white transition-colors duration-300 uppercase"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            Graphics
+          </Link>
+          <Link 
+            to="/websites"
+            className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] hover:text-white transition-colors duration-300 uppercase"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            Websites
+          </Link>
+        </div>
       </div>
 
       {/* Canvas View */}
@@ -173,7 +191,7 @@ function Graphics() {
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
               >
-                <div className="w-72 h-96 overflow-hidden transition-all duration-500 hover:scale-105 hover:z-10 bg-neutral-100">
+                <div className="w-72 h-96 overflow-hidden transition-all duration-500 hover:scale-105 hover:z-10 bg-neutral-900">
                   <img
                     src={art.src}
                     alt=""
@@ -185,36 +203,67 @@ function Graphics() {
             ))}
           </div>
 
-          {/* Hint */}
-          <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-            <span className="text-xs text-neutral-400">Click and drag to navigate</span>
+          {/* Bottom Row - Canvas */}
+          <div className="fixed bottom-0 left-0 right-0 z-30 flex justify-between items-end p-4 md:p-6">
+            <div className="bg-black px-4 py-2">
+              <span className="text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc]/60 uppercase">
+                Click and drag to navigate
+              </span>
+            </div>
+            
+            <a 
+              href="https://linkedin.com/in/shanecos21" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+            >
+              LinkedIn →
+            </a>
           </div>
         </>
       )}
 
       {/* Grid View */}
       {viewMode === 'grid' && (
-        <div className="pt-28 pb-16 px-8 md:px-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-0">
-            {posters.map((src, index) => (
-              <div
-                key={index}
-                className="group"
-                onMouseEnter={() => setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-              >
-                <div className="aspect-[3/4] overflow-hidden transition-all duration-500 group-hover:scale-[1.02] group-hover:z-10 group-hover:shadow-xl bg-neutral-100">
-                  <img
-                    src={src}
-                    alt=""
-                    className="w-full h-full object-cover"
-                    draggable={false}
-                  />
+        <>
+          <div className="pt-24 pb-20 px-4 md:px-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-0">
+              {posters.map((src, index) => (
+                <div
+                  key={index}
+                  className="group"
+                  onMouseEnter={() => setIsHovering(true)}
+                  onMouseLeave={() => setIsHovering(false)}
+                >
+                  <div className="aspect-[3/4] overflow-hidden transition-all duration-500 group-hover:scale-[1.02] group-hover:z-10 group-hover:shadow-xl bg-neutral-900">
+                    <img
+                      src={src}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      draggable={false}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+
+          {/* Bottom Row - Grid */}
+          <div className="fixed bottom-0 left-0 right-0 z-30 flex justify-end p-4 md:p-6">
+            <a 
+              href="https://linkedin.com/in/shanecostello" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+            >
+              LinkedIn →
+            </a>
+          </div>
+        </>
       )}
     </div>
   );

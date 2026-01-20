@@ -5,22 +5,81 @@ function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showSongEmbed, setShowSongEmbed] = useState(false);
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorPos = useRef({ x: 0, y: 0 });
   const targetPos = useRef({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  const projects = [
-    { src: '/Poster1.png', title: 'Sylane GAA', category: 'Sports Branding' },
-    { src: '/Background2.png', title: 'No Signal', category: 'Digital Art' },
-    { src: '/pOSTER2.png', title: 'Battle for Glory', category: 'Event Poster' },
-    { src: '/hourglass.png', title: 'Time to Burn', category: 'Illustration' },
-    { src: '/sabcap.png', title: 'Sabcap', category: 'Brand Identity' },
-    { src: '/cardib2.png', title: 'Cardi B', category: 'Artist Poster' },
+  const sections = [
+    {
+      id: 'intro',
+      mainTitle: 'welcome.',
+      rightContent: {
+        label: 'Shane Costello',
+        items: [
+          'Brand Marketing',
+          'Web Development',
+          'Graphic Design',
+          'Content Creation',
+        ],
+      }
+    },
+    {
+      id: 'about',
+      mainTitle: 'designer.',
+      rightContent: {
+        label: 'Skills',
+        items: [
+          'React / JavaScript / PHP',
+          'Adobe Suite / Canva',
+          'MySQL / OpenAI',
+          'Unity / Blender',
+        ],
+      }
+    },
+    {
+      id: 'experience',
+      mainTitle: 'work.',
+      rightContent: {
+        label: 'Recent Roles',
+        items: [
+          'ATU Innovation Hubs',
+          'Symphysis Medical',
+          'Freelance Designer',
+          'Summer Camp Tutor',
+        ],
+      }
+    },
+    {
+      id: 'work',
+      mainTitle: 'portfolio.',
+      rightContent: {
+        label: 'Achievements',
+        items: [
+          'EU Green Award 2025',
+          'Enterprise Ireland Top 50',
+          'AI Beehive Project',
+          'First Class Honours',
+        ],
+      }
+    },
+    {
+      id: 'contact',
+      mainTitle: 'connect.',
+      rightContent: {
+        label: 'Get In Touch',
+        items: [
+          'shanecostello150@gmail.com',
+          '(087) 439-0709',
+          'Galway, Ireland',
+        ],
+      }
+    },
   ];
 
+  const currentSection = sections[currentIndex];
+
   useEffect(() => {
-    // Smooth cursor animation
     const animateCursor = () => {
       if (cursorRef.current) {
         cursorPos.current.x += (targetPos.current.x - cursorPos.current.x) * 0.12;
@@ -36,12 +95,11 @@ function Home() {
       targetPos.current = { x: e.clientX, y: e.clientY };
     };
 
-    // Custom scroll handler
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
       if (isTransitioning) return;
 
-      if (e.deltaY > 0 && currentIndex < projects.length - 1) {
+      if (e.deltaY > 0 && currentIndex < sections.length - 1) {
         setIsTransitioning(true);
         setCurrentIndex(prev => prev + 1);
         setTimeout(() => setIsTransitioning(false), 800);
@@ -60,17 +118,59 @@ function Home() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('wheel', handleWheel);
     };
-  }, [isHovering, currentIndex, isTransitioning, projects.length]);
-
-  const goToProject = (index: number) => {
-    if (isTransitioning || index === currentIndex) return;
-    setIsTransitioning(true);
-    setCurrentIndex(index);
-    setTimeout(() => setIsTransitioning(false), 800);
-  };
+  }, [isHovering, currentIndex, isTransitioning, sections.length]);
 
   return (
-    <div ref={containerRef} className="h-screen w-screen bg-[#0a0a0a] overflow-hidden cursor-none">
+    <div className="h-screen w-screen overflow-hidden cursor-none relative bg-[#0a0a0a]">
+      {/* Repeating Graphics - Right to Left with fading opacity, size, and blur */}
+      <div className="absolute inset-0 flex items-center justify-end pointer-events-none">
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute h-full flex items-center"
+            style={{
+              right: `${i * 15}%`,
+              zIndex: 6 - i,
+              opacity: 1 - (i * 0.15),
+              transform: `scale(${1 - (i * 0.1)})`,
+              filter: `blur(${i * 2}px)`,
+            }}
+          >
+            <img
+              src="/cardib2.png"
+              alt=""
+              className="h-[90vh] w-auto object-contain"
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Selected Graphic & Song Labels */}
+      <div 
+        className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2 z-20 flex gap-4 items-end"
+      >
+        <div className="bg-black px-6 py-3 pointer-events-none">
+          <span 
+            className="text-xs md:text-sm tracking-[0.3em] text-[#e8e4dc] uppercase"
+          >
+            Selected Graphic
+          </span>
+        </div>
+        
+        <button 
+          onClick={() => setShowSongEmbed(!showSongEmbed)}
+          className="bg-black px-6 py-3 hover:bg-neutral-900 transition-colors"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <span 
+            className="text-xs md:text-sm tracking-[0.3em] text-[#e8e4dc] uppercase"
+          >
+            Selected Song
+          </span>
+        </button>
+      </div>
+
       {/* Custom cursor */}
       <div 
         ref={cursorRef}
@@ -86,37 +186,27 @@ function Home() {
         />
       </div>
 
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        {projects.map((project, index) => (
-          <div
-            key={index}
-            className="absolute inset-0 transition-opacity duration-700"
-            style={{ opacity: index === currentIndex ? 1 : 0 }}
-          >
-            <img
-              src={project.src}
-              alt={project.title}
-              className="w-full h-full object-cover opacity-30"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent" />
-          </div>
-        ))}
+      {/* Top Row - STATIC - Absolute positioned */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-start p-4 md:p-6">
+        <div className="bg-black px-4 py-2">
+          <span className="text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase">
+            GALWAY, IRELAND
+          </span>
+        </div>
+
+        <div className="bg-black px-4 py-2">
+          <span className="text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase">
+            2025
+          </span>
+        </div>
       </div>
 
-      {/* Navigation - Top */}
-      <nav className="fixed top-0 left-0 right-0 z-30 flex justify-between items-center px-10 py-8">
-        <span 
-          className="text-white text-sm"
-          style={{ fontFamily: 'Against, sans-serif' }}
-        >
-          Shane
-        </span>
-        <div className="flex gap-8">
+      {/* Centered Nav Buttons */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex justify-center p-4 md:p-6 pointer-events-none">
+        <div className="flex gap-2 pointer-events-auto">
           <Link 
             to="/graphics" 
-            className="text-neutral-400 hover:text-white text-sm transition-colors"
-            style={{ fontFamily: 'Against, sans-serif' }}
+            className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] hover:text-white transition-colors duration-300 uppercase"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
@@ -124,110 +214,137 @@ function Home() {
           </Link>
           <Link 
             to="/websites" 
-            className="text-neutral-400 hover:text-white text-sm transition-colors"
-            style={{ fontFamily: 'Against, sans-serif' }}
+            className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] hover:text-white transition-colors duration-300 uppercase"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
             Websites
           </Link>
         </div>
-      </nav>
+      </div>
 
-      {/* Main Content */}
-      <main className="relative z-10 h-full flex items-center px-10 md:px-20">
-        <div className="max-w-2xl">
-          {/* Project Counter */}
-          <div className="flex items-center gap-4 mb-8">
-            <span 
-              className="text-6xl md:text-8xl text-white font-light"
-              style={{ fontFamily: 'Against, sans-serif' }}
-            >
-              {String(currentIndex + 1).padStart(2, '0')}
-            </span>
-            <div className="h-px w-16 bg-neutral-600" />
-            <span className="text-neutral-500 text-sm">
-              {String(projects.length).padStart(2, '0')}
-            </span>
-          </div>
+      {/* Content Overlay */}
+      <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12 lg:p-16">
 
-          {/* Project Title */}
-          <div className="overflow-hidden mb-4">
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col justify-center overflow-visible">
+          {/* Main Title - Left aligned with overflow */}
+          <div 
+            key={`title-${currentIndex}`}
+            className="overflow-visible animate-fadeIn"
+          >
             <h1 
-              key={currentIndex}
-              className="text-5xl md:text-7xl text-white animate-slide-up"
-              style={{ fontFamily: 'Against, sans-serif' }}
+              className="text-[16vw] md:text-[13vw] lg:text-[11vw] leading-[0.9] text-[#e8e4dc] whitespace-nowrap font-medium tracking-tight"
+              style={{ 
+                fontFamily: 'DM Sans, sans-serif',
+              }}
             >
-              {projects[currentIndex].title}
+              {currentSection.mainTitle}
             </h1>
           </div>
 
-          {/* Category */}
-          <p className="text-neutral-400 text-sm tracking-wider uppercase mb-12">
-            {projects[currentIndex].category}
-          </p>
-
-          {/* View Project Button */}
-          <Link
-            to="/graphics"
-            className="inline-flex items-center gap-3 text-white group"
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
+          {/* Details - Below title */}
+          <div 
+            key={`details-${currentIndex}`}
+            className="mt-32 md:mt-40 lg:mt-48 overflow-visible animate-fadeIn"
+            style={{ animationDelay: '0.15s' }}
           >
-            <span className="text-sm tracking-wider uppercase">View Project</span>
-            <span className="group-hover:translate-x-2 transition-transform">→</span>
-          </Link>
+            <h2 
+              className="text-2xl md:text-3xl lg:text-4xl text-[#e8e4dc] mb-4 font-medium"
+            >
+              {currentSection.rightContent.label}
+            </h2>
+            
+            <div className="space-y-2">
+              {currentSection.rightContent.items.map((item, index) => (
+                <p 
+                  key={index}
+                  className="text-base md:text-lg lg:text-xl text-[#e8e4dc] leading-snug text-shadow animate-fadeIn"
+                  style={{ animationDelay: `${0.25 + index * 0.08}s` }}
+                >
+                  {item}
+                </p>
+              ))}
+            </div>
+          </div>
         </div>
-      </main>
 
-      {/* Project Preview - Right Side */}
-      <div className="absolute right-10 md:right-20 top-1/2 -translate-y-1/2 z-20">
-        <div 
-          className="w-64 md:w-80 aspect-[3/4] rounded-lg overflow-hidden shadow-2xl transition-transform duration-700"
+      </div>
+
+      {/* Spotify Embed Slider */}
+      <div 
+        className={`fixed bottom-16 md:bottom-20 right-0 z-30 flex items-center transition-transform duration-500 ease-out ${
+          showSongEmbed ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <button
+          onClick={() => setShowSongEmbed(false)}
+          className="bg-black px-3 py-4 hover:bg-neutral-900 transition-colors"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          <img
-            src={projects[currentIndex].src}
-            alt={projects[currentIndex].title}
-            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+          <span className="text-[#e8e4dc] text-lg">→</span>
+        </button>
+        <div className="bg-black p-2">
+          <iframe 
+            src="https://open.spotify.com/embed/track/1qyw5wSUkEvH8DtaCdx7Lg?utm_source=generator&theme=0" 
+            width="300" 
+            height="80" 
+            frameBorder="0" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy"
+            className="rounded"
           />
         </div>
       </div>
 
-      {/* Progress Dots - Right Side */}
-      <div className="fixed right-10 top-1/2 -translate-y-1/2 z-30 flex flex-col gap-3">
-        {projects.map((_, index) => (
+      {/* Bottom Row - STATIC - Absolute positioned */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-between items-end p-4 md:p-6">
+        <div className="bg-black px-4 py-2">
+          <span className="text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc]">
+            ©Shane Costello
+          </span>
+        </div>
+        
+        <div className="bg-black px-4 py-2">
+          <span className="text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase">
+            SCROLL
+          </span>
+        </div>
+        
+          <a 
+            href="https://linkedin.com/in/shanecos21" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            LinkedIn →
+          </a>
+      </div>
+
+      {/* Progress indicator - moved to left */}
+      <div className="fixed left-4 md:left-6 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-3">
+        {sections.map((_, index) => (
           <button
             key={index}
-            onClick={() => goToProject(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            onClick={() => {
+              if (!isTransitioning) {
+                setIsTransitioning(true);
+                setCurrentIndex(index);
+                setTimeout(() => setIsTransitioning(false), 800);
+              }
+            }}
+            className={`w-[3px] rounded-full transition-all duration-500 ease-out ${
               index === currentIndex 
-                ? 'bg-white scale-125' 
-                : 'bg-neutral-600 hover:bg-neutral-400'
+                ? 'h-10 bg-[#e8e4dc]' 
+                : 'h-3 bg-[#e8e4dc]/30 hover:bg-[#e8e4dc]/60'
             }`}
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           />
         ))}
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2">
-        <span className="text-neutral-500 text-xs tracking-wider uppercase">Scroll</span>
-        <div className="w-px h-8 bg-gradient-to-b from-neutral-500 to-transparent animate-pulse" />
-      </div>
-
-      {/* Contact */}
-      <div className="fixed bottom-10 right-10 z-30">
-        <a 
-          href="mailto:hello@shane.com" 
-          className="text-neutral-500 hover:text-white text-xs transition-colors"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          Get in touch →
-        </a>
       </div>
     </div>
   );

@@ -67,13 +67,13 @@ function Websites() {
 
   return (
     <div 
-      className="min-h-screen w-screen bg-[#0a0a0a] cursor-none overflow-x-hidden overflow-y-auto"
+      className="min-h-screen w-screen bg-[#0a0a0a] cursor-auto md:cursor-none overflow-x-hidden overflow-y-auto"
       style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
     >
-      {/* Custom cursor - fluid */}
+      {/* Custom cursor - hidden on touch devices */}
       <div 
         ref={cursorRef}
-        className="pointer-events-none fixed z-50 mix-blend-difference"
+        className="pointer-events-none fixed z-50 mix-blend-difference hidden md:block"
         style={{ left: 0, top: 0 }}
       >
         <div 
@@ -134,7 +134,7 @@ function Websites() {
           {websites.map((site, index) => (
             <div key={index} className="group">
               {/* Two images side by side */}
-              <div className="grid grid-cols-2 gap-2 md:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-4">
                 <div 
                   className="aspect-[4/3] overflow-hidden bg-neutral-900"
                   onMouseEnter={() => setIsHovering(true)}

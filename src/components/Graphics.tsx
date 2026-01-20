@@ -63,13 +63,35 @@ function Graphics() {
       setIsDragging(false);
     };
 
+    // Touch support for canvas drag
+    const handleTouchMove = (e: TouchEvent) => {
+      if (isDragging && viewMode === 'canvas') {
+        const touch = e.touches[0];
+        const deltaX = touch.clientX - dragStart.current.x;
+        const deltaY = touch.clientY - dragStart.current.y;
+        setPosition(prev => ({
+          x: prev.x + deltaX,
+          y: prev.y + deltaY
+        }));
+        dragStart.current = { x: touch.clientX, y: touch.clientY };
+      }
+    };
+
+    const handleTouchEnd = () => {
+      setIsDragging(false);
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd);
     
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isDragging, isHovering, viewMode]);
 
@@ -80,16 +102,24 @@ function Graphics() {
     }
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (viewMode === 'canvas') {
+      setIsDragging(true);
+      dragStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+
   return (
     <div 
-      className={`min-h-screen w-screen bg-[#0a0a0a] overflow-x-hidden scrollbar-hide ${viewMode === 'canvas' ? 'h-screen overflow-hidden cursor-grab active:cursor-grabbing' : 'overflow-y-auto cursor-none'}`}
+      className={`min-h-screen w-screen bg-[#0a0a0a] overflow-x-hidden scrollbar-hide ${viewMode === 'canvas' ? 'h-screen overflow-hidden cursor-grab active:cursor-grabbing' : 'overflow-y-auto cursor-auto md:cursor-none'}`}
       onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
       style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
     >
-      {/* Custom cursor - fluid */}
+      {/* Custom cursor - hidden on touch devices */}
       <div 
         ref={cursorRef}
-        className="pointer-events-none fixed z-50 mix-blend-difference"
+        className="pointer-events-none fixed z-50 mix-blend-difference hidden md:block"
         style={{ left: 0, top: 0 }}
       >
         <div 

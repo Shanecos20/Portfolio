@@ -79,6 +79,8 @@ function Home() {
 
   const currentSection = sections[currentIndex];
 
+  const touchStart = useRef({ y: 0 });
+
   useEffect(() => {
     const animateCursor = () => {
       if (cursorRef.current) {
@@ -110,18 +112,43 @@ function Home() {
       }
     };
 
+    // Touch support for mobile
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStart.current.y = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (isTransitioning) return;
+      const deltaY = touchStart.current.y - e.changedTouches[0].clientY;
+      const threshold = 50;
+
+      if (deltaY > threshold && currentIndex < sections.length - 1) {
+        setIsTransitioning(true);
+        setCurrentIndex(prev => prev + 1);
+        setTimeout(() => setIsTransitioning(false), 800);
+      } else if (deltaY < -threshold && currentIndex > 0) {
+        setIsTransitioning(true);
+        setCurrentIndex(prev => prev - 1);
+        setTimeout(() => setIsTransitioning(false), 800);
+      }
+    };
+
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd, { passive: true });
     
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
     };
   }, [isHovering, currentIndex, isTransitioning, sections.length]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden cursor-none relative bg-[#0a0a0a]">
+    <div className="h-screen w-screen overflow-hidden cursor-auto md:cursor-none relative bg-[#0a0a0a]">
       {/* Repeating Graphics - Right to Left with fading opacity, size, and blur */}
       <div className="absolute inset-0 flex items-center justify-end pointer-events-none">
         {[...Array(6)].map((_, i) => (
@@ -147,11 +174,11 @@ function Home() {
 
       {/* Selected Graphic & Song Labels */}
       <div 
-        className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2 z-20 flex gap-4 items-end"
+        className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2 z-20 flex flex-col sm:flex-row gap-2 sm:gap-4 items-center"
       >
-        <div className="bg-black px-6 py-3 pointer-events-none">
+        <div className="bg-black px-4 sm:px-6 py-2 sm:py-3 pointer-events-none">
           <span 
-            className="text-xs md:text-sm tracking-[0.3em] text-[#e8e4dc] uppercase"
+            className="text-[10px] sm:text-xs md:text-sm tracking-[0.2em] sm:tracking-[0.3em] text-[#e8e4dc] uppercase"
           >
             Selected Graphic
           </span>
@@ -159,22 +186,22 @@ function Home() {
         
         <button 
           onClick={() => setShowSongEmbed(!showSongEmbed)}
-          className="bg-black px-6 py-3 hover:bg-neutral-900 transition-colors"
+          className="bg-black px-4 sm:px-6 py-2 sm:py-3 hover:bg-neutral-900 transition-colors"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
           <span 
-            className="text-xs md:text-sm tracking-[0.3em] text-[#e8e4dc] uppercase"
+            className="text-[10px] sm:text-xs md:text-sm tracking-[0.2em] sm:tracking-[0.3em] text-[#e8e4dc] uppercase"
           >
             Selected Song
           </span>
         </button>
       </div>
 
-      {/* Custom cursor */}
+      {/* Custom cursor - hidden on touch devices */}
       <div 
         ref={cursorRef}
-        className="pointer-events-none fixed z-50 mix-blend-difference"
+        className="pointer-events-none fixed z-50 mix-blend-difference hidden md:block"
         style={{ left: 0, top: 0 }}
       >
         <div 
@@ -288,27 +315,27 @@ function Home() {
         <div className="bg-black p-2">
           <iframe 
             src="https://open.spotify.com/embed/track/1qyw5wSUkEvH8DtaCdx7Lg?utm_source=generator&theme=0" 
-            width="300" 
+            width="250" 
             height="80" 
             frameBorder="0" 
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
             loading="lazy"
-            className="rounded"
+            className="rounded w-[200px] sm:w-[250px] md:w-[300px]"
           />
         </div>
       </div>
 
       {/* Bottom Row - STATIC - Absolute positioned */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-between items-end p-4 md:p-6">
-        <div className="bg-black px-4 py-2">
-          <span className="text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc]">
+      <div className="absolute bottom-0 left-0 right-0 z-20 flex justify-between items-end p-3 sm:p-4 md:p-6">
+        <div className="bg-black px-2 sm:px-4 py-1 sm:py-2">
+          <span className="text-[10px] sm:text-xs md:text-sm tracking-[0.1em] sm:tracking-[0.2em] text-[#e8e4dc]">
             ©Shane Costello
           </span>
         </div>
         
-        <div className="bg-black px-4 py-2">
-          <span className="text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase">
-            SCROLL
+        <div className="bg-black px-2 sm:px-4 py-1 sm:py-2">
+          <span className="text-[10px] sm:text-xs md:text-sm tracking-[0.1em] sm:tracking-[0.2em] text-[#e8e4dc] uppercase">
+            SWIPE
           </span>
         </div>
         
@@ -316,7 +343,7 @@ function Home() {
             href="https://linkedin.com/in/shanecos21" 
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
+            className="bg-black px-2 sm:px-4 py-1 sm:py-2 text-[10px] sm:text-xs md:text-sm tracking-[0.1em] sm:tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >

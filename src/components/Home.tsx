@@ -164,8 +164,8 @@ function Home() {
           {sections.map((section, idx) => (
             <div key={section.id} className={`py-12 ${idx !== 0 ? 'border-t border-[#e8e4dc]/10' : ''}`}>
               <h1 
-                className="text-[15vw] leading-[0.9] text-[#e8e4dc] font-medium tracking-tight mb-8"
-                style={{ fontFamily: 'DM Sans, sans-serif' }}
+                className="text-[15vw] leading-[0.9] text-[#e8e4dc] font-semibold tracking-tight mb-8"
+                style={{ fontFamily: 'Montserrat, sans-serif' }}
               >
                 {section.mainTitle}
               </h1>
@@ -323,9 +323,9 @@ function Home() {
             className="overflow-visible animate-fadeIn"
           >
             <h1 
-              className="text-[13vw] lg:text-[11vw] leading-[0.9] text-[#e8e4dc] whitespace-nowrap font-medium tracking-tight"
+              className="text-[13vw] lg:text-[11vw] leading-[0.9] text-[#e8e4dc] whitespace-nowrap font-semibold tracking-tight"
               style={{ 
-                fontFamily: 'DM Sans, sans-serif',
+                fontFamily: 'Montserrat, sans-serif',
               }}
             >
               {currentSection.mainTitle}

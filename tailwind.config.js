@@ -7,6 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        montserrat: ['Montserrat', 'sans-serif'],
         pixel: ['Press Start 2P', 'cursive'],
         retro: ['VT323', 'monospace'],
         mono: ['Space Mono', 'monospace'],

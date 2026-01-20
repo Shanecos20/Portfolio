@@ -149,16 +149,27 @@ function Graphics() {
         <span className="text-[10px] md:text-xs tracking-[0.1em] text-[#e8e4dc]/60">
           ©Shane Costello
         </span>
-        <a 
-          href="https://linkedin.com/in/shanecos21" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-black px-4 py-2 text-[10px] md:text-xs tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          LinkedIn →
-        </a>
+        <div className="flex gap-2">
+          <a 
+            href="/Shane Costello CV.pdf"
+            download
+            className="bg-black px-4 py-2 text-[10px] md:text-xs tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            CV ↓
+          </a>
+          <a 
+            href="https://linkedin.com/in/shanecos21" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-black px-4 py-2 text-[10px] md:text-xs tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            LinkedIn →
+          </a>
+        </div>
       </div>
     </div>
   );

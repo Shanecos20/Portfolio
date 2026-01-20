@@ -139,19 +139,24 @@ function Home() {
     return (
       <div className="min-h-screen w-screen bg-[#0a0a0a] overflow-x-hidden">
         {/* Top Nav */}
-        <div className="sticky top-0 z-20 flex justify-center gap-2 p-4 bg-[#0a0a0a]/90 backdrop-blur-sm">
-          <Link 
-            to="/graphics" 
-            className="bg-black px-4 py-2 text-xs tracking-[0.2em] text-[#e8e4dc] uppercase"
-          >
-            Graphics
-          </Link>
-          <Link 
-            to="/websites" 
-            className="bg-black px-4 py-2 text-xs tracking-[0.2em] text-[#e8e4dc] uppercase"
-          >
-            Websites
-          </Link>
+        <div className="sticky top-0 z-20 flex flex-col items-center gap-2 p-4 bg-[#0a0a0a]/90 backdrop-blur-sm">
+          <span className="text-[9px] tracking-[0.15em] text-[#e8e4dc]/40 uppercase">
+            Best viewed on desktop
+          </span>
+          <div className="flex gap-2">
+            <Link 
+              to="/graphics" 
+              className="bg-black px-4 py-2 text-xs tracking-[0.2em] text-[#e8e4dc] uppercase"
+            >
+              Graphics
+            </Link>
+            <Link 
+              to="/websites" 
+              className="bg-black px-4 py-2 text-xs tracking-[0.2em] text-[#e8e4dc] uppercase"
+            >
+              Websites
+            </Link>
+          </div>
         </div>
 
         {/* All Sections */}
@@ -185,14 +190,23 @@ function Home() {
           <span className="text-[10px] tracking-[0.1em] text-[#e8e4dc]/60">
             ©Shane Costello
           </span>
-          <a 
-            href="https://linkedin.com/in/shanecos21" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[10px] tracking-[0.1em] text-[#e8e4dc] uppercase"
-          >
-            LinkedIn →
-          </a>
+          <div className="flex gap-3">
+            <a 
+              href="/Shane Costello CV.pdf"
+              download
+              className="text-[10px] tracking-[0.1em] text-[#e8e4dc] uppercase"
+            >
+              CV ↓
+            </a>
+            <a 
+              href="https://linkedin.com/in/shanecos21" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[10px] tracking-[0.1em] text-[#e8e4dc] uppercase"
+            >
+              LinkedIn →
+            </a>
+          </div>
         </div>
       </div>
     );
@@ -387,6 +401,16 @@ function Home() {
           </span>
         </div>
         
+        <div className="flex gap-2">
+          <a 
+            href="/Shane Costello CV.pdf"
+            download
+            className="bg-black px-4 py-2 text-sm tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            CV ↓
+          </a>
           <a 
             href="https://linkedin.com/in/shanecos21" 
             target="_blank"
@@ -397,6 +421,7 @@ function Home() {
           >
             LinkedIn →
           </a>
+        </div>
       </div>
 
       {/* Progress indicator - moved to left */}

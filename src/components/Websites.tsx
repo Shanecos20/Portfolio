@@ -210,8 +210,17 @@ function Websites() {
         </div>
       </div>
 
-      {/* Bottom Row - Just LinkedIn */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 flex justify-end p-4 md:p-6">
+      {/* Bottom Row */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 flex justify-end gap-2 p-4 md:p-6">
+        <a 
+          href="/Shane Costello CV.pdf"
+          download
+          className="bg-black px-4 py-2 text-xs md:text-sm tracking-[0.2em] text-[#e8e4dc] uppercase hover:text-white transition-colors"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          CV ↓
+        </a>
         <a 
           href="https://linkedin.com/in/shanecos21" 
           target="_blank"
